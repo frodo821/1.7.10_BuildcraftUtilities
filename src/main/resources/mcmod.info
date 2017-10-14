@@ -1,0 +1,22 @@
+[
+{
+  "modid": "bcutil",
+  "name": "BuildCraft Utilities",
+  "description": "A utilities pack for buildcraft.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": [
+    "frodo821"
+  ],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [
+  ],
+  "parent":"BuildCraft|Energy",
+  "dependencies": [
+  	"mod_MinecraftForge"
+  ]
+}
+]

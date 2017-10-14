@@ -1,0 +1,81 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            name = "forge"
+            url = "http://files.minecraftforge.net/maven"
+        }
+        maven {
+            name = "sonatype"
+            url = "https://oss.sonatype.org/content/repositories/snapshots/"
+        }
+    }
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
+    }
+}
+
+task help{
+	doLast {
+		println "Available arguments are:\n\tenc :Source code encoding. Default value is \"UTF-8.\"\n\tver :The mod version. Default value is \"default.\"\n\tgroup :The mod creator group\n\nFor example,\n\tgradlew build -Pver=\"development\""
+	}
+}
+
+apply plugin: 'forge'
+
+sourceSets.main{
+    java.srcDirs project.projectDir.name
+    resources.srcDirs project.projectDir.name
+}
+if(project.hasProperty('ver')){
+    version = project.ver
+}else{
+    version = "default"
+}
+
+if(project.hasProperty('group')){
+    group = project.group
+}else{
+    group = "net.mysdbox.bcutil"
+}
+
+archivesBaseName = "BCUtil"
+
+minecraft {
+    version = "1.7.10-10.13.4.1614-1.7.10"
+    runDir = "eclipse"
+}
+
+dependencies {
+    compile fileTree( dir: 'lib', include: '*.jar' )
+}
+
+processResources
+{
+    // this will ensure that this task is redone when the versions change.
+    inputs.property "version", project.version
+    inputs.property "mcversion", project.minecraft.version
+
+    // replace stuff in mcmod.info, nothing else
+    from(sourceSets.main.resources.srcDirs) {
+        include 'mcmod.info'
+                
+        // replace version and mcversion
+        expand 'version':project.version, 'mcversion':project.minecraft.version
+    }
+        
+    // copy everything else, thats not the mcmod.info
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'mcmod.info'
+    }
+}
+
+tasks.withType(Jar) {
+	if(project.hasProperty('enc')){
+		compileJava.options.encoding = project.enc
+		compileApiJava.options.encoding = project.enc
+	}else{
+		compileJava.options.encoding = "UTF-8"
+		compileApiJava.options.encoding = "UTF-8"
+	}
+}
